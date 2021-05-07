@@ -8,6 +8,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const bodyParser = require('body-parser');
 
 // Constants
 const BASE_URL = 'https://itunes.apple.com/search?'
@@ -42,6 +43,10 @@ function filterDuplicates(array)
     return array;
 }
 
+// Middle wares
+// router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.json());
+
 // Routing
 router.get('/', async(request, response) => {
 
@@ -69,6 +74,12 @@ router.get('/', async(request, response) => {
         console.log("ERROR! Failing request to iTunes API");
     }
     
+})
+
+router.post('/request', (request, response) => {
+
+    console.log(request.body);
+
 })
 
 // End routing
