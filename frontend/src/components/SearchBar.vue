@@ -6,11 +6,27 @@
       <input type="text" id="artistName" size="50" v-model="posts.artistName" placeholder= "Artist or Band name" />
       <button type="submit">Search</button>
     </form>
+    <h3>Number of results: {{ result.numberResults }}</h3>
+
+
+    <table class="table text-center" align="center">
+      <thead>
+        <tr>
+          <th>Album</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="albumItem in result.albumData" :key="albumItem.id">
+          <td v-text="albumItem.albumTitle"></td> 
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+
 export default {
   name: 'SearchBar',
   props: {
@@ -20,15 +36,34 @@ export default {
     return {
       posts:{
         artistName: null
+      },
+      result:{
+        numberResults: null,
+        albumData: []
       }
     }
   },
   methods:{
+    storeAlbumEntry(albumItem)
+    {
+      this.result.albumData.push(albumItem);
+    },
+    clearAlbumData()
+    {
+      this.result.albumData = [];
+    },
     postData(e)
     {
       axios.post("http://localhost:3000/request", this.posts)
         .then((result) => {
           console.log(result);
+          this.result.numberResults = result.data.resultCount;
+          this.clearAlbumData();
+          for (var i = 0; i < result.data.resultCount; i++) {
+            var albumData = {albumTitle: result.data.results[i].collectionName};
+            this.storeAlbumEntry(albumData);
+          }
+
         });
       e.preventDefault();
     }

@@ -44,7 +44,7 @@ function filterDuplicates(array)
 }
 
 // Middle wares
-// router.use(bodyParser.urlencoded({ extended: false }));
+router.use(bodyParser.urlencoded());
 router.use(bodyParser.json());
 
 // Routing
@@ -76,10 +76,38 @@ router.get('/', async(request, response) => {
     
 })
 
-router.post('/request', (request, response) => {
+router.post('/request', async(request, response) => {
 
-    console.log(request.body);
+    console.log("Request is " + request.body.artistName);
+   
+    const iTunesRequest = BASE_URL 
+    + 'term=' + request.body.artistName
+    + '&media=' + media
+    + '&entity=' + entity
+    + '&attribute=' + attribute
+    + '&limit=' + limitValue;
 
+    try {
+
+        console.log('Requested query ' + iTunesRequest);
+
+        const result = await axios.get(iTunesRequest);
+
+        /* Disable filter for the moment
+        const dataFiltered = filterDuplicates(result.data.results);
+
+        console.log("Album titles without duplicated:")
+        dumpAlbumNames(dataFiltered);
+
+        //return response.json(result.data);
+        return response.json(JSON.stringify(dataFiltered));
+        */
+
+        return response.json(result.data);
+
+    } catch(err) {
+    console.log("ERROR! Failing request to iTunes API");
+    }   
 })
 
 // End routing
