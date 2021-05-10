@@ -12,12 +12,14 @@
     <table class="table text-center" align="center">
       <thead>
         <tr>
-          <th>Album</th>
+          <th>Album title</th>
+          <th>Cover</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="albumItem in result.albumData" :key="albumItem.id">
-          <td v-text="albumItem.albumTitle"></td> 
+          <td v-text="albumItem.albumTitle"></td>
+          <td><img v-bind:src="albumItem.albumCover" v-bind:alt="albumItem.albumTitle"></td>
         </tr>
       </tbody>
     </table>
@@ -60,7 +62,8 @@ export default {
           this.result.numberResults = result.data.resultCount;
           this.clearAlbumData();
           for (var i = 0; i < result.data.resultCount; i++) {
-            var albumData = {albumTitle: result.data.results[i].collectionName};
+            var albumData = {albumTitle: result.data.results[i].collectionName,
+                             albumCover: result.data.results[i].artworkUrl100};
             this.storeAlbumEntry(albumData);
           }
 
