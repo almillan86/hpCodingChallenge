@@ -1,20 +1,18 @@
 <template>
   <div id="app">
-    <SearchBar />
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img class="titleImg" src="./assets/hp_music.png" />
+    <SearchTool />    
+    <h4> Tool designed by Alberto Millán </h4>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import SearchBar from './components/SearchBar.vue'
+import SearchTool from './components/SearchTool.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    SearchBar
+    SearchTool
   }
 }
 </script>
@@ -27,5 +25,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.titleImg {
+  max-width: 100%;
+  height: auto;
+}
+
+h3 {
+  margin: 40px 0 0;
+}
+
+h4 {
+  align: bottom;
+  font-size: 12px;
 }
 </style>

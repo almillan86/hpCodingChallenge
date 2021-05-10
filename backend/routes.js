@@ -14,7 +14,7 @@ const bodyParser = require('body-parser');
 const BASE_URL = 'https://itunes.apple.com/search?'
 
 // Variables to define from Vue.js
-var term = 'michael+jackson';
+var term = ''; //< To be completed with info coming from FrontEnd
 var media = 'music';
 var entity = 'album';
 var attribute = 'artistTerm';
@@ -41,6 +41,11 @@ function filterDuplicates(array)
     console.log(JSON.stringify(array));    
 
     return array;
+}
+
+function transformInput(string)
+{
+    return string.replace(/\s+/g, '+');
 }
 
 // Middle wares
@@ -79,9 +84,10 @@ router.get('/', async(request, response) => {
 router.post('/request', async(request, response) => {
 
     console.log("Request is " + request.body.artistName);
-   
+    console.log("After transformation is " + transformInput(request.body.artistName))
+  
     const iTunesRequest = BASE_URL 
-    + 'term=' + request.body.artistName
+    + 'term=' + transformInput(request.body.artistName)
     + '&media=' + media
     + '&entity=' + entity
     + '&attribute=' + attribute

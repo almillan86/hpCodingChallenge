@@ -1,28 +1,22 @@
 <template>
-  <div class="SearchBar">
-    <h1> Look for a singer/band </h1>
+  <div class="SearchTool">
     <form @submit="postData" method="post">
       <label for="artistName">Name of the artist/band: </label>
       <input type="text" id="artistName" size="50" v-model="posts.artistName" placeholder= "Artist or Band name" />
       <button type="submit">Search</button>
     </form>
-    <h3>Number of results: {{ result.numberResults }}</h3>
+    <h3 :style="{visibility: result.numberResults ? 'visible' : 'hidden'}">Number of results: {{ result.numberResults }}</h3>
 
-
-    <table class="table text-center" align="center">
-      <thead>
-        <tr>
-          <th>Album title</th>
-          <th>Cover</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="albumItem in result.albumData" :key="albumItem.id">
-          <td v-text="albumItem.albumTitle"></td>
-          <td><img v-bind:src="albumItem.albumCover" v-bind:alt="albumItem.albumTitle"></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="grid-container" :style="{visibility: result.numberResults ? 'visible' : 'hidden'}">
+      <div class="grid-item" v-for="albumItem in result.albumData" :key="albumItem.id">
+        <table class="table-center">
+          <tbody>
+            <tr><img  class="center" v-bind:src="albumItem.albumCover" v-bind:alt="albumItem.albumTitle" /></tr>
+            <tr v-text="albumItem.albumTitle"></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +24,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'SearchBar',
+  name: 'SearchTool',
   props: {
     msg: String
   },
@@ -40,7 +34,7 @@ export default {
         artistName: null
       },
       result:{
-        numberResults: null,
+        numberResults: 0,
         albumData: []
       }
     }
@@ -76,18 +70,44 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+table {
+  align: center;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+img{
+  align: center;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.SearchTool{
+  margin: 10px 10px 10px 10px;
 }
-a {
-  color: #42b983;
+
+.table-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 1);
+  border: 0px solid rgb(0, 0, 0, 1);
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin: 5px 5px 5px 5px;
+  width: 1fr;
 }
 </style>
