@@ -38,8 +38,6 @@ function filterDuplicates(array)
       return exists;
     });
     
-    console.log(JSON.stringify(array));    
-
     return array;
 }
 
@@ -53,34 +51,6 @@ router.use(bodyParser.urlencoded());
 router.use(bodyParser.json());
 
 // Routing
-router.get('/', async(request, response) => {
-
-    const iTunesRequest = BASE_URL 
-                        + 'term=' + term
-                        + '&media=' + media
-                        + '&entity=' + entity
-                        + '&attribute=' + attribute
-                        + '&limit=' + limitValue;
-
-    try {
-
-        console.log('Requested query ' + iTunesRequest);
-
-        const result = await axios.get(iTunesRequest);
-        const dataFiltered = filterDuplicates(result.data.results);
-
-        console.log("Album titles without duplicated:")
-        dumpAlbumNames(dataFiltered);
-
-        //return response.json(result.data);
-        return response.json(JSON.stringify(dataFiltered));
-
-    } catch(err) {
-        console.log("ERROR! Failing request to iTunes API");
-    }
-    
-})
-
 router.post('/request', async(request, response) => {
 
     console.log("Request is " + request.body.artistName);
@@ -91,7 +61,7 @@ router.post('/request', async(request, response) => {
     + '&media=' + media
     + '&entity=' + entity
     + '&attribute=' + attribute
-    + '&limit=' + limitValue;
+    //+ '&limit=' + limitValue;
 
     try {
 
@@ -99,20 +69,14 @@ router.post('/request', async(request, response) => {
 
         const result = await axios.get(iTunesRequest);
 
-        /* Disable filter for the moment
-        const dataFiltered = filterDuplicates(result.data.results);
-
-        console.log("Album titles without duplicated:")
-        dumpAlbumNames(dataFiltered);
-
-        //return response.json(result.data);
-        return response.json(JSON.stringify(dataFiltered));
-        */
-
+        result.data.results = filterDuplicates(result.data.results);
+        result.data.resultCount = result.data.results.length;
+        
+        //return response.json(JSON.stringify(dataFiltered));
         return response.json(result.data);
 
     } catch(err) {
-    console.log("ERROR! Failing request to iTunes API");
+        console.log("ERROR! Failing request to iTunes API");
     }   
 })
 

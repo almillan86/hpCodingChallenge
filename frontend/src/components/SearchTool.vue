@@ -5,7 +5,7 @@
       <input type="text" id="artistName" size="50" v-model="posts.artistName" placeholder= "Artist or Band name" />
       <button type="submit">Search</button>
     </form>
-    <h3 :style="{visibility: result.numberResults ? 'visible' : 'hidden'}">Number of results: {{ result.numberResults }}</h3>
+    <h3 :style="{visibility: result.searchDone ? 'visible' : 'hidden'}">Number of results: {{ result.numberResults }}</h3>
 
     <div class="grid-container" :style="{visibility: result.numberResults ? 'visible' : 'hidden'}">
       <div class="grid-item" v-for="albumItem in result.albumData" :key="albumItem.id">
@@ -34,6 +34,7 @@ export default {
         artistName: null
       },
       result:{
+        searchDone: false,
         numberResults: 0,
         albumData: []
       }
@@ -53,6 +54,7 @@ export default {
       axios.post("http://localhost:3000/request", this.posts)
         .then((result) => {
           console.log(result);
+          this.result.searchDone = true;
           this.result.numberResults = result.data.resultCount;
           this.clearAlbumData();
           for (var i = 0; i < result.data.resultCount; i++) {
