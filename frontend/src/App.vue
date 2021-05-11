@@ -6,6 +6,8 @@
   </div>
 </template>
 
+
+
 <script>
 import SearchTool from './components/SearchTool.vue'
 
@@ -33,11 +35,12 @@ export default {
 }
 
 h3 {
-  margin: 40px 0 0;
+  margin: 5px 5px 5px 5px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 h4 {
-  align: bottom;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
 }
 </style>

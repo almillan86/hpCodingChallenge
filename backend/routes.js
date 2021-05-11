@@ -61,7 +61,7 @@ router.post('/request', async(request, response) => {
     + '&media=' + media
     + '&entity=' + entity
     + '&attribute=' + attribute
-    //+ '&limit=' + limitValue;
+    + '&limit=' + limitValue;
 
     try {
 
@@ -70,6 +70,7 @@ router.post('/request', async(request, response) => {
         const result = await axios.get(iTunesRequest);
 
         result.data.results = filterDuplicates(result.data.results);
+
         result.data.resultCount = result.data.results.length;
         
         //return response.json(JSON.stringify(dataFiltered));
