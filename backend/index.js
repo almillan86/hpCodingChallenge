@@ -38,6 +38,6 @@ app.use(routes);
 // Main code
 app.listen(SERVER_PORT, () =>
 {
-    console.log('App running');
+    console.log('App running!');
 })
 

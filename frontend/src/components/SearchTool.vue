@@ -15,13 +15,13 @@
     <!-- LoadingBlock -->
     <div id = "loadingBlock" v-if="result.loading">
       <h3>Loading...</h3>
-      <img src="../assets/loading.gif" />
+      <img src="./../assets/loading.gif" />
     </div>
 
     <!-- ErrorBlock -->
     <div id = "errorBlock" v-if="result.error">
-      <h3>Error when requesting info to iTunes</h3>
-      <img src="../assets/error.png" width="5%" />
+      <h3>Error when requesting info from iTunes</h3>
+      <img src="./../assets/error.png" />
     </div>
 
     <!-- filterBlock -->
@@ -106,9 +106,9 @@ export default {
         .then((result) => {
           this.result.numberResults = result.data.resultCount;
           this.clearAlbumData();
-          for (var i = 0; i < result.data.resultCount; i++) {
-            var albumData = {albumTitle: result.data.results[i].collectionName,
-                             albumCover: result.data.results[i].artworkUrl100};
+          for (let i = 0; i < result.data.resultCount; i++) {
+            const albumData = {albumTitle: result.data.results[i].collectionName,
+                               albumCover: result.data.results[i].artworkUrl100};
             this.storeAlbumEntry(albumData);
           }
         })
@@ -127,75 +127,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-table {
-  align: center;
-}
-
-img{
-  align: center;
-}
-
-input[type=text] {
-  width: 30%;
-  padding: 12px 20px;
-  margin: 8px 8px;
-  box-sizing: border-box;
-  border: none;
-  background-color: lightsteelblue;
-  color: black;
-  font-size: 14px;
-}
-
-button {
-  width:10%;
-  background-color: royalblue;
-  border: none;
-  color: white;
-  padding: 12px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-}
-
-.SearchTool{
-  margin: 10px 10px 10px 10px;
-}
-
-.table-center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.grid-container {
-  justify-content: center;
-  align-content: center;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  background-color: rgba(255, 255, 255, 1);
-  padding: 10px;
-  margin: 10px 10px 10px 10px;
-}
-.grid-item {
-  align-items: center;
-  justify-items: center;
-  background-color: rgba(80, 100, 230, 0.1);
-  border: 0px solid rgb(0, 0, 0, 1);
-  padding: 10px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-weight: bold;
-  font-variant: small-caps;
-  font-size: 12px;
-  text-align: center;
-  margin: 5px 5px 5px 5px;
-  width: 1fr;
-}
+@import './../assets/css/searchTool.css'
 </style>

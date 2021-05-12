@@ -8,7 +8,6 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const bodyParser = require('body-parser');
 
 // Constants
 const BASE_URL = 'https://itunes.apple.com/search?'
@@ -47,14 +46,12 @@ function transformInput(string)
 }
 
 // Middle wares
-router.use(express.urlencoded());
+router.use(express.urlencoded({extended: true}));
 router.use(express.json());
 
 // Routing
 router.post('/request', async(request, response) => {
 
-    console.log("Request is " + request.body.artistName);
-    console.log("After transformation is " + transformInput(request.body.artistName))
   
     const iTunesRequest = BASE_URL 
     + 'term=' + transformInput(request.body.artistName)
@@ -73,7 +70,6 @@ router.post('/request', async(request, response) => {
 
         result.data.resultCount = result.data.results.length;
         
-        //return response.json(JSON.stringify(dataFiltered));
         return response.json(result.data);
 
     } catch(err) {
