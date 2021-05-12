@@ -115,7 +115,6 @@ export default {
       .catch(() => {
         this.result.loading = false;
         this.result.error = true;
-        return;
       })
       .finally(() => {
         this.result.loading = false;

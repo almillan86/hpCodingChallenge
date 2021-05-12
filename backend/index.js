@@ -41,3 +41,5 @@ app.listen(SERVER_PORT, () =>
     console.log('App running!');
 })
 
+module.exports = app;
+

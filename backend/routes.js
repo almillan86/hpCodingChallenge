@@ -52,15 +52,14 @@ router.use(express.json());
 // Routing
 router.post('/request', async(request, response) => {
 
-  
-    const iTunesRequest = BASE_URL 
-    + 'term=' + transformInput(request.body.artistName)
-    + '&media=' + media
-    + '&entity=' + entity
-    + '&attribute=' + attribute
-    + '&limit=' + limitValue;
-
     try {
+
+        const iTunesRequest = BASE_URL 
+        + 'term=' + transformInput(request.body.artistName)
+        + '&media=' + media
+        + '&entity=' + entity
+        + '&attribute=' + attribute
+        + '&limit=' + limitValue;
 
         console.log('Requested query ' + iTunesRequest);
 
@@ -70,10 +69,11 @@ router.post('/request', async(request, response) => {
 
         result.data.resultCount = result.data.results.length;
         
-        return response.json(result.data);
+        return response.status(201).json(result.data);
 
     } catch(err) {
         console.log("ERROR! Failing request to iTunes API");
+        return response.status(400).send('Non valid request');
     }   
 })
 
