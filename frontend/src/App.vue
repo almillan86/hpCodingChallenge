@@ -13,6 +13,10 @@ import SearchTool from './components/SearchTool.vue'
 
 export default {
   name: 'App',
+  created()
+  {
+    document.title = "HP Music";
+  },
   components: {
     SearchTool
   }

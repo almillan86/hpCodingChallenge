@@ -47,8 +47,8 @@ function transformInput(string)
 }
 
 // Middle wares
-router.use(bodyParser.urlencoded());
-router.use(bodyParser.json());
+router.use(express.urlencoded());
+router.use(express.json());
 
 // Routing
 router.post('/request', async(request, response) => {

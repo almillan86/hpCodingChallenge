@@ -12,11 +12,23 @@
 
     </div>
 
+    <!-- LoadingBlock -->
+    <div id = "loadingBlock" v-if="result.loading">
+      <h3>Loading...</h3>
+      <img src="../assets/loading.gif" />
+    </div>
+
+    <!-- ErrorBlock -->
+    <div id = "errorBlock" v-if="result.error">
+      <h3>Error when requesting info to iTunes</h3>
+      <img src="../assets/error.png" width="5%" />
+    </div>
+
     <!-- filterBlock -->
     <div id = "filterBlock" v-if="result.searchDone">
 
       <input type="text" id="filterInput" v-model="filterSearch" placeholder="Keyword to filter" /> 
-      <button v-on:click="result.searchDone=false; filterSearch=''; posts.artistName=''">Return to Search</button>
+      <button v-on:click="onReturnToSearchClick()">Return to Search</button>
 
     </div>
 
@@ -26,7 +38,7 @@
       <h3 v-if="filteredAlbums.length == result.numberResults">Number of results: {{ result.numberResults }}</h3>
       <h3 v-else>Number of results: {{ filteredAlbums.length }} / {{ result.numberResults }}</h3>
 
-      <div class="grid-container" :style="{visibility: result.numberResults ? 'visible' : 'hidden'}">
+      <div class="grid-container" v-if="(result.numberResults > 0)">
         <div class="grid-item" v-for="albumItem in filteredAlbums" :key="albumItem.id">
           <table class="table-center">
             <tbody>
@@ -53,6 +65,8 @@ export default {
       },
       result:{
         searchDone: false,
+        loading: false,
+        error: false,
         numberResults: 0,
         albumData: []
       },
@@ -68,6 +82,12 @@ export default {
       }
     },
   methods:{
+    onReturnToSearchClick()
+    {
+      this.result.searchDone=false; 
+      this.filterSearch=''; 
+      this.posts.artistName='';
+    },
     storeAlbumEntry(albumItem)
     {
       this.result.albumData.push(albumItem);
@@ -78,10 +98,12 @@ export default {
     },
     postData(e)
     {
-      const POST_ADDRESS = "http://localhost:3000/request"
+      const POST_ADDRESS = "http://localhost:3000/request";
+      this.result.error = false;
+      this.result.loading = true;
+      
       axios.post(POST_ADDRESS, this.posts)
         .then((result) => {
-          this.result.searchDone = true;
           this.result.numberResults = result.data.resultCount;
           this.clearAlbumData();
           for (var i = 0; i < result.data.resultCount; i++) {
@@ -89,8 +111,16 @@ export default {
                              albumCover: result.data.results[i].artworkUrl100};
             this.storeAlbumEntry(albumData);
           }
-
-        });
+        })
+      .catch(() => {
+        this.result.loading = false;
+        this.result.error = true;
+        return;
+      })
+      .finally(() => {
+        this.result.loading = false;
+        this.result.searchDone = !this.result.error;
+      });
       e.preventDefault();
     }
   }
@@ -146,13 +176,18 @@ button {
 }
 
 .grid-container {
+  justify-content: center;
+  align-content: center;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   background-color: rgba(255, 255, 255, 1);
   padding: 10px;
+  margin: 10px 10px 10px 10px;
 }
 .grid-item {
-  background-color: rgba(255, 255, 255, 1);
+  align-items: center;
+  justify-items: center;
+  background-color: rgba(80, 100, 230, 0.1);
   border: 0px solid rgb(0, 0, 0, 1);
   padding: 10px;
   font-family: Arial, Helvetica, sans-serif;
