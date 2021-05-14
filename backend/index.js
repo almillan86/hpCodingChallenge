@@ -36,10 +36,15 @@ app.use(function (request, result, next) {
 app.use(routes);
 
 // Main code
-app.listen(SERVER_PORT, () =>
+let server = app.listen(SERVER_PORT, () =>
 {
     console.log('App running!');
 })
 
+function stopServer() {
+    server.close();
+}
+
 module.exports = app;
+module.exports.stop = stopServer;
 

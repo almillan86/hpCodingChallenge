@@ -13,11 +13,11 @@ const axios = require('axios');
 const BASE_URL = 'https://itunes.apple.com/search?'
 
 // Variables to define from Vue.js
-var term = ''; //< To be completed with info coming from FrontEnd
-var media = 'music';
-var entity = 'album';
-var attribute = 'artistTerm';
-var limitValue = 200;
+let term = ''; //< To be completed with info coming from FrontEnd
+let media = 'music';
+let entity = 'album';
+let attribute = 'artistTerm';
+let limitValue = 200;
 
 // Helpers
 function dumpAlbumNames(array)

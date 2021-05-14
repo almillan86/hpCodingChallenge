@@ -5,6 +5,9 @@ let server = require('../index');
 //Assertion style
 chai.should();
 
+//Close server at the end
+after(() => require('../index').stop());
+
 chai.use(chaiHttp);
 
 describe ('Test API', () =>

@@ -4,9 +4,9 @@
     <!-- searchBlock -->
     <div id = "searchBlock" v-if="!result.searchDone" >
 
-      <form @submit="postData" method="post">
-        <input type="text" id="artistNameInput" v-model="posts.artistName" placeholder= "Artist or Band name to search" />
-        <button type="submit">Search</button>
+      <form id="searchForm" @submit="postData" method="post">
+        <input id="artistNameInput" type="text" v-model="posts.artistName" placeholder= "Artist or Band name to search" />
+        <button id="searchButton" type="submit">Search</button>
         <br/>
       </form>
 
@@ -24,11 +24,11 @@
       <img src="./../assets/error.png" />
     </div>
 
-    <!-- filterBlock -->
+    <!-- FilterBlock -->
     <div id = "filterBlock" v-if="result.searchDone">
 
       <input type="text" id="filterInput" v-model="filterSearch" placeholder="Keyword to filter" /> 
-      <button v-on:click="onReturnToSearchClick()">Return to Search</button>
+      <button id="backToSearchButton" v-on:click="onReturnToSearchClick()">Return to Search</button>
 
     </div>
 
