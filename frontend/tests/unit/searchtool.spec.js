@@ -1,26 +1,6 @@
 import {mount} from '@vue/test-utils';
 import SearchTool from '@/components/SearchTool.vue';
 
-const context= {
-    posts: {
-        artistName: 'David Bowie'
-    }
-  }
-
-const jsonResponse = {
-    resultCount: 1,
-    results: [
-        { collectionName: 'ABC', artworkUrl100: 'http://myUrl'}
-    ]
- };
-
-jest.mock('axios', () => ({
-    post: jest.fn((_url) => {
-        url = _url;
-        return Promise.resolve(true);
-    })
-}));
-
 describe ('SearchTool.vue', () => {
 
     it ('renders succesfully', () => {
@@ -32,7 +12,7 @@ describe ('SearchTool.vue', () => {
 
         let wrapper;
 
-        beforeAll(() => {
+        beforeEach(() => {
             wrapper = mount(SearchTool, {});
             wrapper.vm.result.searchDone = false;
             wrapper.vm.result.loading = false;
@@ -58,10 +38,6 @@ describe ('SearchTool.vue', () => {
         it('does not contain a Div called resultsBlock', () => {
             expect(wrapper.find('#resultsBlock').exists()).toBe(false);
         });
-
-        it('contains a form', () => {
-            expect(wrapper.find('#searchForm').exists()).toBe(true);
-        });
         
         it('contains an input text', () => {
             expect(wrapper.find('#artistNameInput').exists()).toBe(true);
@@ -71,13 +47,20 @@ describe ('SearchTool.vue', () => {
             expect(wrapper.find('#searchButton').exists()).toBe(true);
         });
 
+        it('onClick search button will call postData function', async() => {
+            const spy = jest.spyOn(wrapper.vm, 'postData')
+            await wrapper.find('#searchButton').trigger('click');
+            expect(spy).toHaveBeenCalled();
+            jest.restoreAllMocks();
+        });
+
     });
 
     describe('When Search is in progress', () => {
 
         let wrapper;
 
-        beforeAll(() => {
+        beforeEach(() => {
             wrapper = mount(SearchTool, {});
             wrapper.vm.result.searchDone = false;
             wrapper.vm.result.loading = true;
@@ -109,7 +92,7 @@ describe ('SearchTool.vue', () => {
 
         let wrapper;
 
-        beforeAll(() => {
+        beforeEach(() => {
             wrapper = mount(SearchTool, {});
             wrapper.vm.result.searchDone = false;
             wrapper.vm.result.loading = false;
@@ -142,11 +125,11 @@ describe ('SearchTool.vue', () => {
 
         let wrapper;
 
-        beforeAll(() => {
+        beforeEach(() => {
             wrapper = mount(SearchTool, {});
             wrapper.vm.result.searchDone = true;
             wrapper.vm.result.loading = false;
-            wrapper.vm.result.error = false;
+            wrapper.vm.result.error = false;         
         });
 
         it('does not contain a Div called searchBlock', () => {
@@ -176,23 +159,45 @@ describe ('SearchTool.vue', () => {
         it('contains a "Back to Search" button', () => {
             expect(wrapper.find('#backToSearchButton').exists()).toBe(true);
         });
-        
+
+        it('when clicking a "Back to Search" button, then "SearchBlock" appears again', async() => {
+            const spy = jest.spyOn(wrapper.vm, 'onReturnToSearchClick')
+            await wrapper.find('#backToSearchButton').trigger('click');
+            expect(spy).toHaveBeenCalled();
+            expect(wrapper.vm.result.searchDone).toBe(false);
+            expect(wrapper.vm.filterSearch).toMatch('');
+            expect(wrapper.vm.posts.artistName).toMatch('');
+            jest.restoreAllMocks();
+        });
+
+        describe('When not having results', () => {
+            
+            beforeEach(() => {
+                wrapper.vm.result.numberResults = 0;
+            });
+
+            beforeEach(() => {
+                wrapper.vm.result.numberResults = 0;     
+            });
+
+            it('when not having results to show, then grid-container is not rendered', () => {
+                expect(wrapper.find('#resultsContainer').exists()).toBe(false);
+            });
+        });
+
+        describe('When having results', () => {
+            
+            beforeEach(() => {
+                wrapper.vm.result.numberResults = 1;
+                wrapper.vm.result.albumData = [{
+                    albumTitle: 'Bohemian Rhapsody',
+                    albumCover: 'url-undefined'
+                }];
+            });
+
+            it('when having some result to show, then grid-container is rendered', () => {
+                expect(wrapper.find('#resultsContainer').exists()).toBe(true);
+            });
+        });
     });
-
-/*
-    it ('contains a form', () => {
-        const wrapper = mount(SearchTool, {});
-        expect(wrapper.html()).toContain('form');
-    });
-
-    it ('post a request when search button is pressed', async() => {
-
-        const mockMethod = jest.spyOn(SearchTool.methods, 'postData');
-        const wrapper = mount(SearchTool, {});
-        expect(wrapper.find('#searchButton').exists()).toBe(true);
-        await (wrapper.find('#searchButton')).trigger('click');
-        expect(mockMethod).toHaveBeenCalledTimes(1);
-
-    });
-    */
 });

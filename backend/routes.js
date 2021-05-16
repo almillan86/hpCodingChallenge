@@ -30,9 +30,9 @@ function dumpAlbumNames(array)
 
 function filterDuplicates(array)
 {
-    var hash = {};
+    let hash = {};
     array = array.filter(function(current) {
-      var exists = !hash[current.collectionName];
+      let exists = !hash[current.collectionName];
       hash[current.collectionName] = true;
       return exists;
     });

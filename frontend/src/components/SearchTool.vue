@@ -3,13 +3,9 @@
 
     <!-- searchBlock -->
     <div id = "searchBlock" v-if="!result.searchDone" >
-
-      <form id="searchForm" @submit="postData" method="post">
-        <input id="artistNameInput" type="text" v-model="posts.artistName" placeholder= "Artist or Band name to search" />
-        <button id="searchButton" type="submit">Search</button>
-        <br/>
-      </form>
-
+      <input id="artistNameInput" type="text" v-model="posts.artistName" placeholder= "Artist or Band name to search" />
+      <button id="searchButton" v-on:click="postData()" >Search</button>
+      <br/>
     </div>
 
     <!-- LoadingBlock -->
@@ -26,19 +22,16 @@
 
     <!-- FilterBlock -->
     <div id = "filterBlock" v-if="result.searchDone">
-
       <input type="text" id="filterInput" v-model="filterSearch" placeholder="Keyword to filter" /> 
       <button id="backToSearchButton" v-on:click="onReturnToSearchClick()">Return to Search</button>
-
     </div>
 
     <!-- resultsBlock -->
     <div id = "resultsBlock" v-if="result.searchDone">
-
       <h3 v-if="filteredAlbums.length == result.numberResults">Number of results: {{ result.numberResults }}</h3>
       <h3 v-else>Number of results: {{ filteredAlbums.length }} / {{ result.numberResults }}</h3>
 
-      <div class="grid-container" v-if="(result.numberResults > 0)">
+      <div id="resultsContainer" class="grid-container" v-if="(result.numberResults > 0)">
         <div class="grid-item" v-for="albumItem in filteredAlbums" :key="albumItem.id">
           <table class="table-center">
             <tbody>
@@ -48,7 +41,6 @@
           </table>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -77,7 +69,7 @@ export default {
     {
       filteredAlbums: function(){
         return this.result.albumData.filter((albumItem) => {
-          return albumItem.albumTitle.toLowerCase().match(this.filterSearch)
+          return albumItem.albumTitle.toLowerCase().match(this.filterSearch);
         });
       }
     },
@@ -96,7 +88,7 @@ export default {
     {
       this.result.albumData = [];
     },
-    postData(e)
+    postData()
     {
       const POST_ADDRESS = "http://localhost:3000/request";
       this.result.error = false;
@@ -120,7 +112,6 @@ export default {
         this.result.loading = false;
         this.result.searchDone = !this.result.error;
       });
-      e.preventDefault();
     }
   }
 }
